@@ -6,7 +6,7 @@ import base64
 import numpy as np
 from typing import Dict, List
 import os
-from common import config  # Import configuration
+from common.config import config  # Import configuration
 
 # Set up logging
 logging.basicConfig(level=logging.INFO)
