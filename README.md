@@ -113,9 +113,16 @@ Output descriptions are saved as `output_0.txt`, etc., in the current directory.
 
 ## Configuration
 
-- **Backend Model Service**: The application communicates with a model service at `localhost:9999` by default. Update the `host` and `port` in `tcp_utils.py` if needed.
-- **Static Files**: Served from the `static/` directory, including HTML, JavaScript, CSS, and favicon.
-- **Logging**: Configured to output INFO-level logs for debugging and monitoring.
+### Backend Model Service
+The MiniCPM-o Frontend relies on the [Model Service](https://github.com/kaseyq/model-service) as its backing service for AI inference. This WebSocket-based TCP server, deployed via Docker with CUDA support, handles model inference for tasks like voice mimicry (using `minicpm-o_2_6`) and photo description. The frontend communicates with the model service at `localhost:9999` by default. To configure a different host or port, update the `host` and `port` parameters in `common/tcp_utils.py`.
+
+Ensure the model service is running before starting the frontend. Refer to the [Model Service repository](https://github.com/kaseyq/model-service) for setup and configuration details.
+
+### Static Files
+Served from the `static/` directory, including HTML, JavaScript, CSS, and favicon.
+
+### Logging
+Configured to output INFO-level logs for debugging and monitoring.
 
 ## Development
 

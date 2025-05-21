@@ -1,0 +1,9 @@
+# Configuration for MiniCPM-o Frontend
+server:
+  host: "0.0.0.0"  # Host for the FastAPI server
+  port: 8000       # Port for the FastAPI server
+
+model_service:
+  host: "localhost"  # Host for the backing model service (https://github.com/kaseyq/model-service)
+  port: 9999         # Port for the backing model service
+  timeout: 300.0     # Timeout (in seconds) for TCP communication with the model service

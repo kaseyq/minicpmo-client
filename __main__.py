@@ -13,11 +13,12 @@ from fastapi.staticfiles import StaticFiles
 from fastapi.responses import FileResponse
 from starlette.responses import Response as StarletteResponse
 from voice_mimic.views import router as voice_mimic_router
-from describe_photo.views import router as describe_photo_router
+from describe_photo.views import router as voice_mimic_router
 from common.file_utils import FileHandler, AudioProcessingError
 from common.audio_utils import AudioProcessor
 from common.image_utils import ImageProcessor, ImageProcessingError
 from common.tcp_utils import send_request_to_server
+from common.config import config  # Import configuration
 
 # Set up logging
 logging.basicConfig(level=logging.INFO)
@@ -190,7 +191,10 @@ def main():
     parser = parse_args()
     # If no arguments provided, run as server
     if len(sys.argv) == 1:
-        uvicorn.run(app, host="0.0.0.0", port=8000)
+        server_config = config.get('server', {})
+        host = server_config.get('host', '0.0.0.0')
+        port = server_config.get('port', 8000)
+        uvicorn.run(app, host=host, port=port)
         return
 
     args = parser.parse_args()

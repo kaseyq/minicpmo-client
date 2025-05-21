@@ -6,16 +6,23 @@ import base64
 import numpy as np
 from typing import Dict, List
 import os
+from common import config  # Import configuration
 
 # Set up logging
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
-async def send_request_to_server(messages: List[Dict], params: Dict, host: str = 'localhost', port: int = 9999) -> Dict:
+async def send_request_to_server(messages: List[Dict], params: Dict) -> Dict:
     """Send a request to the model service asynchronously."""
+    model_service_config = config.get('model_service', {})
+    host = model_service_config.get('host', 'localhost')
+    port = model_service_config.get('port', 9999)
+    timeout = model_service_config.get('timeout', 300.0)
+    
     try:
         logger.info(f"Connecting to model service at {host}:{port}")
-        reader, writer = await asyncio.open_connection(host, port)
+        async with asyncio.timeout(timeout):
+            reader, writer = await asyncio.open_connection(host, port)
         
         # Prepare request
         for msg in messages:
@@ -53,6 +60,9 @@ async def send_request_to_server(messages: List[Dict], params: Dict, host: str =
             raise RuntimeError(f"Server error: {response['error']}")
         
         return response
+    except asyncio.TimeoutError:
+        logger.error(f"Request to model service at {host}:{port} timed out after {timeout} seconds")
+        raise RuntimeError(f"Model service timeout after {timeout} seconds")
     except Exception as e:
         logger.error(f"Error communicating with model service at {host}:{port}: {str(e)}")
         raise
