@@ -1,0 +1,1 @@
+# Empty file to make describe_photo a package
